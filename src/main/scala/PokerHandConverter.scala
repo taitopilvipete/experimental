@@ -62,11 +62,11 @@ object PokerHandConverter {
           case Some(value) => {
             val suit = suitOfChar(tail.head)
             val card = new Card(suit, value)
-            hand.appendCard(card)
+            recursivelyConstructHandFromString(tail.tail, hand.withAnotherCard(card))
           }
-          case None => // fine, do nothing
+          case None => recursivelyConstructHandFromString(tail, hand)
         }
-        recursivelyConstructHandFromString(tail.tail, hand)
+
       }
     }
   }

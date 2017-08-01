@@ -1,10 +1,13 @@
 package fi.tp.experimental.pokerhands
 
-case class Card(val suit : Suit, val value : Byte)
+case class Card(val suit : Suit, val value : Int)
 
 // restrict to five cards? let's not
 case class PokerHand(val cards : List[Card]) {
-  def appendCard(card: Card) = cards.+:(card)
+
+  def cardsSorted = cards.sortWith((card1, card2) => card1.value > card2.value)
+
+  def withAnotherCard(card: Card) : PokerHand = new PokerHand(cards.::(card))
 }
 
 trait PokerhandComparator {
