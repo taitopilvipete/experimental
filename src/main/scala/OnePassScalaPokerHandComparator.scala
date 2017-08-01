@@ -1,15 +1,27 @@
 package fi.tp.experimental.pokerhands
 
-object ScalaPokerHandComparator extends PokerhandComparator {
+/**
+  * Implements hand comparison using a slightly more complicated (vs a straightforward check for each made hand separately)
+  * one-pass algorithm. Basically all the tuples (pairs, sets, quads) are detected by keeping count of how many times a
+  * value is seen in a row. Straights and flushes are excluded if they bomb.
+  *
+  * Relies heavily on sorting the cards first, and sorting them again after calculating and adding somewhat arbitrary
+  * - albeit still differentiating enough - "bonus" values (multiplicities of 10) to different made hand types.
+  *
+  * After these calculations, two hands are easily compared just by summing the values of their cards together. They
+  * could also be compared card by card for a slightly faster execution.
+  *
+  */
+object OnePassScalaPokerHandComparator extends PokerhandComparator {
 
   private val VALUE_BONUS_OF_PAIR           = 100
-  private val VALUE_BONUS_OF_TWO_PAIR       = 1000
-  private val VALUE_BONUS_OF_SET            = 10000
-  private val VALUE_BONUS_OF_STRAIGHT       = 100000
-  private val VALUE_BONUS_OF_FLUSH          = 1000000
-  private val VALUE_BONUS_OF_FULL_HOUSE     = 10000000
-  private val VALUE_BONUS_OF_QUADS          = 100000000
-  private val VALUE_BONUS_OF_STRAIGHT_FLUSH = 200000000
+  // two pair is not needed : two pair will handle itself private val VALUE_BONUS_OF_TWO_PAIR       = 1000
+  private val VALUE_BONUS_OF_SET            = 1000
+  private val VALUE_BONUS_OF_STRAIGHT       = 10000
+  private val VALUE_BONUS_OF_FLUSH          = 100000
+  private val VALUE_BONUS_OF_FULL_HOUSE     = 1000000
+  private val VALUE_BONUS_OF_QUADS          = 10000000
+  private val VALUE_BONUS_OF_STRAIGHT_FLUSH = 100000000
 
   /**
     * Compares the given two hands.
@@ -26,7 +38,24 @@ object ScalaPokerHandComparator extends PokerhandComparator {
     return sumOfCards(cards1) - sumOfCards(cards2)
   }
 
+  private def calculateHandValueToHand(hand: PokerHand): List[Card] = {
 
+    // sort first
+    val cardsSorted = hand.cardsSorted
+
+    // detect different hands by iterating once
+    val handWithValues = handleCardRecursive(new PokerHand(Nil), None, cardsSorted, true, true, 1)
+
+    // calculate sums of both
+    val sorted = handWithValues.cardsSorted
+
+    // somewhat of a hack: detect full house at this level because the amount of state required
+    // to detect it inside handleCardRecursive is prohibitively ugly
+    val firstCard: Card = handleFullHouse(sorted)
+
+    firstCard :: sorted.tail
+
+  }
 
   private def sumOfCards(cards: List[Card]) : Int = {
     cards.reduce((card1, card2) => new Card(card1.suit, card1.value + card2.value)).value
@@ -95,25 +124,6 @@ object ScalaPokerHandComparator extends PokerhandComparator {
       case card :: restOfCards => handleCardRecursive(newPokerHand,
         Some(currentCard), card :: restOfCards, newIsStraightAlive, newIsFlushAlive, newSameValuesInARowCounter)
     }
-
-  }
-
-  private def calculateHandValueToHand(hand: PokerHand): List[Card] = {
-
-    // sort first
-    val cardsSorted = hand.cardsSorted
-
-    // detect different hands by iterating once
-    val handWithValues = handleCardRecursive(new PokerHand(Nil), None, cardsSorted, true, true, 1)
-
-    // calculate sums of both
-    val sorted = handWithValues.cardsSorted
-
-    // somewhat of a hack: detect full house at this level because the amount of state required
-    // to detect it inside handleCardRecursive is prohibitively ugly
-    val firstCard: Card = handleFullHouse(sorted)
-
-    firstCard :: sorted.tail
 
   }
 

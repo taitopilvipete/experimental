@@ -1,10 +1,10 @@
 package fi.tp.experimental.pokerhands
 
 import org.scalatest.FunSuite
-import ScalaPokerHandComparator._
+import OnePassScalaPokerHandComparator._
 import PokerHandConverter.handFromString
 
-class ScalaPokerHandComparatorTest extends FunSuite {
+class OnePassScalaPokerHandComparatorTest extends FunSuite {
 
   test("Ace high beats king high") {
     testBothWays(handFromString("As Qc Jh 7s 2c"), handFromString("Kd 5h 4c 3s 2s"), '>')
@@ -28,6 +28,14 @@ class ScalaPokerHandComparatorTest extends FunSuite {
 
   test("Pair of kings with Q kicker beats pair of kings with J kicker") {
     testBothWays(handFromString("Kd 5h 4c Ks Qs"), handFromString("Kd 5h 4c Ks Js"), '>')
+  }
+
+  test("Small two pair beats big pair") {
+    testBothWays(handFromString("As Qc Ah Ks 9c"), handFromString("2d 3h 4c 3s 2s"), '<')
+  }
+
+  test("When the two pairs are the same, kicker counts") {
+    testBothWays(handFromString("2d 3h Qc 3s 2s"), handFromString("2d 3h Tc 3s 2s"), '>')
   }
 
   test("Three of a kind beats two pair") {
