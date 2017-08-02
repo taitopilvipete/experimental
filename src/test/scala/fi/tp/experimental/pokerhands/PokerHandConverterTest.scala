@@ -1,8 +1,8 @@
 package fi.tp.experimental.pokerhands
 
+import fi.tp.experimental.pokerhands.PokerHandConverter.handFromString
+import fi.tp.experimental.pokerhands.Suit._
 import org.scalatest.FunSuite
-import PokerHandConverter.handFromString
-import Suit._
 
 class PokerHandConverterTest extends FunSuite {
 
