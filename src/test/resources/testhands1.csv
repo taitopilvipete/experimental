@@ -1,0 +1,8 @@
+As Kc Td 9c 8h > Kh 7c 5d 4h 2s  # simple high
+As Kc Td 9c 8h = Kc Ac 9d Th 8c  # equal ace high
+As Kc Td 9c 8h < Kh 7c 7d 4h 2s  # one pair
+As 5c 5d 9c 8h < Kh 7c 7d 4h 2s
+As Ac Jd 9c 8h > As Ac Td 9c 8h  # one pair with high
+As Ac Td 9c 8h < Kh 7c 7d Kc 2s  # two pair beats one pair
+
+ 
