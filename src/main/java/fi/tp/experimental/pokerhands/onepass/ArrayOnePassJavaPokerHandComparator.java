@@ -4,10 +4,11 @@ import fi.tp.experimental.pokerhands.Card;
 import fi.tp.experimental.pokerhands.PokerHand;
 import fi.tp.experimental.pokerhands.PokerHandComparator;
 
-import java.awt.*;
-import java.util.*;
-
+import fi.tp.experimental.pokerhands.javautil.CardComparator;
 import scala.collection.JavaConverters;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Implements hand comparison using an array that is iterated once with one card look-ahead and -behind.
@@ -167,22 +168,4 @@ public enum ArrayOnePassJavaPokerHandComparator implements PokerHandComparator {
         return javaCollection.toArray(new Card[javaCollection.size()]);
     }
 
-    private class CardComparator implements Comparator<Card> {
-
-        private boolean ascending = false;
-
-        CardComparator asAscending() {
-            ascending = true;
-            return this;
-        }
-
-        @Override
-        public int compare(Card o1, Card o2) {
-            if (ascending) {
-                return o1.value() - o2.value();
-            } else {
-                return o2.value() - o1.value();
-            }
-        }
-    }
 }
