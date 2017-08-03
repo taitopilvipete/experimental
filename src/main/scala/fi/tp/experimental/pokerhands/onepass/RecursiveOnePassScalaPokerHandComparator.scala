@@ -1,4 +1,6 @@
-package fi.tp.experimental.pokerhands
+package fi.tp.experimental.pokerhands.onepass
+
+import fi.tp.experimental.pokerhands.{Card, PokerHand, PokerhandComparator}
 
 /**
   * Implements hand comparison using a slightly more complicated (vs a straightforward check for each made hand separately)
@@ -12,15 +14,6 @@ package fi.tp.experimental.pokerhands
   *
   */
 object RecursiveOnePassScalaPokerHandComparator extends PokerhandComparator {
-
-  private val VALUE_BONUS_OF_PAIR = 100
-  private val VALUE_BONUS_OF_TWO_PAIR = 1000
-  private val VALUE_BONUS_OF_SET = 10000
-  private val VALUE_BONUS_OF_STRAIGHT = 100000
-  private val VALUE_BONUS_OF_FLUSH = 1000000
-  private val VALUE_BONUS_OF_FULL_HOUSE = 10000000
-  private val VALUE_BONUS_OF_QUADS = 100000000
-  private val VALUE_BONUS_OF_STRAIGHT_FLUSH = 200000000
 
   /**
     * Compares the given two hands.
@@ -44,7 +37,9 @@ object RecursiveOnePassScalaPokerHandComparator extends PokerhandComparator {
     val cardsSorted = hand.cardsSorted.reverse
 
     // detect different hands by iterating once
-    val handWithValues = handleCardRecursive(new PokerHand(Nil), None, cardsSorted, true, true, false, false, 1)
+    val handWithValues = handleCardRecursive(new PokerHand(Nil), None, cardsSorted,
+      true, true,
+      false, false, 1)
 
     // sort after re-valuation descending
     handWithValues.cardsSorted
@@ -96,24 +91,24 @@ object RecursiveOnePassScalaPokerHandComparator extends PokerhandComparator {
                 newIsOnePairDetected = true
                 if (isSetDetected) {
                   // becomes a full house, BUG ALERT - bonus will be awarded to the pair, not the set : will be fixed later in this method
-                  VALUE_BONUS_OF_FULL_HOUSE
+                  OnePassAlgorithmConstants.VALUE_BONUS_OF_FULL_HOUSE
                 } else if (isOnePairDetected) {
                   // becomes two pair, BUG ALERT - bonus will be awarded to lower of the pairs, not the higher
-                  VALUE_BONUS_OF_TWO_PAIR
+                  OnePassAlgorithmConstants.VALUE_BONUS_OF_TWO_PAIR
                 } else {
-                  VALUE_BONUS_OF_PAIR
+                  OnePassAlgorithmConstants.VALUE_BONUS_OF_PAIR
                 }
               }
               case 3 => {
                 newIsSetDetected = true
                 if (isOnePairDetected) {
                   // becomes a full house
-                  VALUE_BONUS_OF_FULL_HOUSE
+                  OnePassAlgorithmConstants.VALUE_BONUS_OF_FULL_HOUSE
                 } else {
-                  VALUE_BONUS_OF_SET
+                  OnePassAlgorithmConstants.VALUE_BONUS_OF_SET
                 }
               }
-              case 4 => VALUE_BONUS_OF_QUADS
+              case 4 => OnePassAlgorithmConstants.VALUE_BONUS_OF_QUADS
             }
           }
         }
@@ -133,11 +128,11 @@ object RecursiveOnePassScalaPokerHandComparator extends PokerhandComparator {
     if (restOfCards.isEmpty) {
       // cards exhausted, add final multiplier for straights and better
       if (newIsStraightAlive && newIsFlushAlive) {
-        sameValueBonus = VALUE_BONUS_OF_STRAIGHT_FLUSH
+        sameValueBonus = OnePassAlgorithmConstants.VALUE_BONUS_OF_STRAIGHT_FLUSH
       } else if (newIsFlushAlive) {
-        sameValueBonus = VALUE_BONUS_OF_FLUSH
+        sameValueBonus = OnePassAlgorithmConstants.VALUE_BONUS_OF_FLUSH
       } else if (newIsStraightAlive) {
-        sameValueBonus = VALUE_BONUS_OF_STRAIGHT
+        sameValueBonus = OnePassAlgorithmConstants.VALUE_BONUS_OF_STRAIGHT
       }
     }
 
@@ -147,14 +142,14 @@ object RecursiveOnePassScalaPokerHandComparator extends PokerhandComparator {
     var newPokerHand = pokerHand.withAnotherCard(currentCardAdjusted)
 
     // fix bug where full house value was awarded to an element of the pair, not one of the set
-    if (sameValueBonus == VALUE_BONUS_OF_FULL_HOUSE && !isOnePairDetected) {
+    if (sameValueBonus == OnePassAlgorithmConstants.VALUE_BONUS_OF_FULL_HOUSE && !isOnePairDetected) {
       // one pair was detected at the end
       val cardsSorted = newPokerHand.cardsSorted
       // award full house value to the first card, and deduct it from the second highest card
       val firstCard = cardsSorted.head
       val secondCard = cardsSorted.tail.head
-      val correctedFirstCard = new Card(firstCard.suit, firstCard.value - VALUE_BONUS_OF_FULL_HOUSE + VALUE_BONUS_OF_SET)
-      val correctedSecondCard = new Card(secondCard.suit, secondCard.value + VALUE_BONUS_OF_FULL_HOUSE - VALUE_BONUS_OF_SET)
+      val correctedFirstCard = new Card(firstCard.suit, firstCard.value - OnePassAlgorithmConstants.VALUE_BONUS_OF_FULL_HOUSE + OnePassAlgorithmConstants.VALUE_BONUS_OF_SET)
+      val correctedSecondCard = new Card(secondCard.suit, secondCard.value + OnePassAlgorithmConstants.VALUE_BONUS_OF_FULL_HOUSE - OnePassAlgorithmConstants.VALUE_BONUS_OF_SET)
       newPokerHand = new PokerHand(List(correctedFirstCard, correctedSecondCard) ++ cardsSorted.tail.tail)
     }
 

@@ -1,6 +1,7 @@
 package fi.tp.experimental.pokerhands.javainvokers
 
-import fi.tp.experimental.pokerhands.{ArrayOnePassJavaPokerHandComparator, PokerHand, PokerhandComparator}
+import fi.tp.experimental.pokerhands.onepass.ArrayOnePassJavaPokerHandComparator
+import fi.tp.experimental.pokerhands.{PokerHand, PokerhandComparator}
 
 /**
   * Bridges java invoker to scala file.
