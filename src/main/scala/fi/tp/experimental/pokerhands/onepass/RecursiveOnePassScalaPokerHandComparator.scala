@@ -1,6 +1,6 @@
 package fi.tp.experimental.pokerhands.onepass
 
-import fi.tp.experimental.pokerhands.{Card, PokerHand, PokerhandComparator}
+import fi.tp.experimental.pokerhands.{Card, PokerHand, PokerHandComparator}
 
 /**
   * Implements hand comparison using a slightly more complicated (vs a straightforward check for each made hand separately)
@@ -13,7 +13,7 @@ import fi.tp.experimental.pokerhands.{Card, PokerHand, PokerhandComparator}
   * After these calculations, two hands are easily compared card by card for a slightly faster execution.
   *
   */
-object RecursiveOnePassScalaPokerHandComparator extends PokerhandComparator {
+object RecursiveOnePassScalaPokerHandComparator extends PokerHandComparator {
 
   /**
     * Compares the given two hands.

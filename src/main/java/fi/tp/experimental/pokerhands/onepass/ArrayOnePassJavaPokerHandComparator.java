@@ -2,7 +2,7 @@ package fi.tp.experimental.pokerhands.onepass;
 
 import fi.tp.experimental.pokerhands.Card;
 import fi.tp.experimental.pokerhands.PokerHand;
-import fi.tp.experimental.pokerhands.PokerhandComparator;
+import fi.tp.experimental.pokerhands.PokerHandComparator;
 
 import java.awt.*;
 import java.util.*;
@@ -12,7 +12,7 @@ import scala.collection.JavaConverters;
 /**
  * Implements hand comparison using an array that is iterated once with one card look-ahead and -behind.
  */
-public enum ArrayOnePassJavaPokerHandComparator implements PokerhandComparator {
+public enum ArrayOnePassJavaPokerHandComparator implements PokerHandComparator {
 
     INSTANCE;
 

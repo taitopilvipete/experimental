@@ -1,7 +1,8 @@
 package fi.tp.experimental.pokerhands
 
 import fi.tp.experimental.pokerhands.onepass.RecursiveOnePassScalaPokerHandComparator
-import fi.tp.experimental.pokerhands.javainvokers.ArrayOnePassJavaPokerHandComparatorInvoker
+import fi.tp.experimental.pokerhands.javainvokers.{ArrayOnePassJavaPokerHandComparatorInvoker, ObjectOrientedMultiPassJavaPokerHandComparatorInvoker}
+import fi.tp.experimental.pokerhands.multipass.ParallelMultipassScalaPokerHandComparator
 import org.scalatest.FunSuite
 
 import scala.io.Source
@@ -16,6 +17,18 @@ class InputTextFilePokerHandComparatorTest extends FunSuite with GenericPokerHan
 
   test("Run tests from file with ArrayOnePassJavaPokerHandComparator") {
     def comparatorFunction = ArrayOnePassJavaPokerHandComparatorInvoker.compareHands  _
+
+    runTestsFromFile(comparatorFunction _)
+  }
+
+  test("Run tests from file with ParallelMultipassScalaPokerHandComparator") {
+    def comparatorFunction = ParallelMultipassScalaPokerHandComparator.compareHands  _
+
+    runTestsFromFile(comparatorFunction _)
+  }
+
+  test("Run tests from file with ObjectOrientedMultipassJavaPokerHandComparator") {
+    def comparatorFunction = ObjectOrientedMultiPassJavaPokerHandComparatorInvoker.compareHands  _
 
     runTestsFromFile(comparatorFunction _)
   }

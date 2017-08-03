@@ -10,7 +10,7 @@ case class PokerHand(val cards : List[Card]) {
   def withAnotherCard(card: Card) : PokerHand = new PokerHand(cards.::(card))
 }
 
-trait PokerhandComparator {
+trait PokerHandComparator {
 
   /**
     * Compares the given two hands.
