@@ -1,6 +1,8 @@
-package fi.tp.experimental.pokerhands
+package fi.tp.experimental.pokerhands.scalautil
 
-object CommonUtilsForJvmLanguages {
+import fi.tp.experimental.pokerhands.Card
+
+object ComparisonUtilsWrittenInScala {
 
   // blindly assumes lists are equal length
   def firstDifference(cards1: List[Card], cards2: List[Card]): Int = cards1 match {

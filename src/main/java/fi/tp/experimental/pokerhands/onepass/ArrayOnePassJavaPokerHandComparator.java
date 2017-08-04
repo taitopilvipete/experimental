@@ -5,10 +5,10 @@ import fi.tp.experimental.pokerhands.PokerHand;
 import fi.tp.experimental.pokerhands.PokerHandComparator;
 
 import fi.tp.experimental.pokerhands.javautil.CardComparator;
-import scala.collection.JavaConverters;
+import fi.tp.experimental.pokerhands.javautil.ComparisonUtilsWrittenInJava;
+import fi.tp.experimental.pokerhands.javautil.ConversionUtilsWrittenInJava;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Implements hand comparison using an array that is iterated once with one card look-ahead and -behind.
@@ -20,13 +20,13 @@ public enum ArrayOnePassJavaPokerHandComparator implements PokerHandComparator {
     @Override
     public int compareHands(PokerHand hand1, PokerHand hand2) {
 
-        Card[] cards1 = toCardArray(hand1);
-        Card[] cards2 = toCardArray(hand2);
+        Card[] cards1 = ConversionUtilsWrittenInJava.INSTANCE.toCardArray(hand1);
+        Card[] cards2 = ConversionUtilsWrittenInJava.INSTANCE.toCardArray(hand2);
 
         calculateHandValueToCardArray(cards1);
         calculateHandValueToCardArray(cards2);
 
-        return firstDifference(cards1, cards2);
+        return ComparisonUtilsWrittenInJava.INSTANCE.firstDifference(cards1, cards2);
 
     }
 
@@ -151,21 +151,6 @@ public enum ArrayOnePassJavaPokerHandComparator implements PokerHandComparator {
                     newSameValuesInARowCounter);
         }
 
-    }
-
-    private int firstDifference(Card[] cards1, Card[] cards2) {
-        for (int i = 0; i<cards1.length; i++) {
-            int difference = cards1[i].value() - cards2[i].value();
-            if (difference != 0) {
-                return difference;
-            }
-        }
-        return 0;
-    }
-
-    private Card[] toCardArray(PokerHand hand) {
-        Collection<Card> javaCollection = JavaConverters.asJavaCollection(hand.cards());
-        return javaCollection.toArray(new Card[javaCollection.size()]);
     }
 
 }

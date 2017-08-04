@@ -1,6 +1,7 @@
 package fi.tp.experimental.pokerhands.onepass
 
-import fi.tp.experimental.pokerhands.{Card, CommonUtilsForJvmLanguages, PokerHand, PokerHandComparator}
+import fi.tp.experimental.pokerhands.scalautil.ComparisonUtilsWrittenInScala
+import fi.tp.experimental.pokerhands.{Card, PokerHand, PokerHandComparator}
 
 /**
   * Implements hand comparison using a slightly more complicated (vs a straightforward check for each made hand separately)
@@ -28,7 +29,7 @@ object RecursiveOnePassScalaPokerHandComparator extends PokerHandComparator {
 
     def cards2: List[Card] = calculateHandValueToHand(hand2)
 
-    return CommonUtilsForJvmLanguages.firstDifference(cards1, cards2)
+    return ComparisonUtilsWrittenInScala.firstDifference(cards1, cards2)
   }
 
   private def calculateHandValueToHand(hand: PokerHand): List[Card] = {
